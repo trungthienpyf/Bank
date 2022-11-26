@@ -48,9 +48,9 @@ const HomePage = () => {
           <button className="button-page-home">
             <div className="home-row-2">
               <div className="">
-                <div className="text-start">Taì khoản chính</div>
+                <div className="text-start">Tài khoản chính</div>
                 <div className="text-start">
-                  số tài khoản:{user?.accountNumber}
+                  <span>số tài khoản: {user?.accountNumber}</span>
                 </div>
               </div>
               <div className="home-col-d-column">{x}</div>

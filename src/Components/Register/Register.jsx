@@ -14,6 +14,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const errorMessage = useSelector((state) => state.auth.login.errorMessage);
+  const isLoad = useSelector((state) => state.auth.register.isFetching);
   const handleRegister = (e) => {
     e.preventDefault();
     const newUser = {
@@ -27,42 +28,50 @@ const Register = () => {
   };
 
   return (
-    <section className="register-container">
-      <div className="register-title"> Đăng ký </div>
-      <form onSubmit={handleRegister}>
-        <label>Họ và tên</label>
-        <input
-          type="text"
-          placeholder="Enter your họ và tên"
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <label>Tài khoản</label>
-        <input
-          type="text"
-          placeholder="Enter your tài khoản"
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <label>Mật khẩu</label>
-        <input
-          type="password"
-          placeholder="Enter your mật khẩu"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <label>Số căn cước</label>
-        <input
-          type="text"
-          placeholder="Enter your số căn cước"
-          onChange={(e) => setIdentity(e.target.value)}
-        />
-        <label>Số điện thoại</label>
-        <input
-          type="text"
-          placeholder="Vui lòng nhập điện thoại"
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <button type="submit"> Create account </button>
-      </form>
-    </section>
+    <>
+      {isLoad ? (
+        <div className="heigh-main">
+          <div class="loader ">Loading... </div>
+        </div>
+      ) : (
+        <section className="register-container">
+          <div className="register-title"> Đăng ký </div>
+          <form onSubmit={handleRegister}>
+            <label>Họ và tên</label>
+            <input
+              type="text"
+              placeholder="Enter your họ và tên"
+              onChange={(e) => setFullName(e.target.value)}
+            />
+            <label>Tài khoản</label>
+            <input
+              type="text"
+              placeholder="Enter your tài khoản"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <label>Mật khẩu</label>
+            <input
+              type="password"
+              placeholder="Enter your mật khẩu"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <label>Số căn cước</label>
+            <input
+              type="text"
+              placeholder="Enter your số căn cước"
+              onChange={(e) => setIdentity(e.target.value)}
+            />
+            <label>Số điện thoại</label>
+            <input
+              type="text"
+              placeholder="Vui lòng nhập điện thoại"
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <button type="submit"> Create account </button>
+          </form>
+        </section>
+      )}
+    </>
   );
 };
 
