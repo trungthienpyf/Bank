@@ -5,6 +5,7 @@ import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import NavBar from "./Components/NavBar/NavBar";
 import { useState } from "react";
+import MoveMoney from "./Components/MoveMoney/MoveMoney";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/move-money" element={<MoveMoney />} />
         </Routes>
       </div>
     </Router>

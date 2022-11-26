@@ -18,6 +18,7 @@ const Login = () => {
     };
     loginUser(newUser, dispatch, navigate);
   };
+
   return (
     <section className="login-container">
       <div className="login-title"> Log in</div>
@@ -39,7 +40,7 @@ const Login = () => {
       </form>
       <div className="login-register"> Don't have an account yet? </div>
       <Link className="login-register-link" to="/register">
-        Register one for free{" "}
+        Register one for free
       </Link>
     </section>
   );
