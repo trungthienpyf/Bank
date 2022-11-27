@@ -6,6 +6,7 @@ import Register from "./Components/Register/Register";
 import NavBar from "./Components/NavBar/NavBar";
 import { useState } from "react";
 import MoveMoney from "./Components/MoveMoney/MoveMoney";
+import HistoryPayment from "./Components/HistoryPayment/HistoryPayment";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/move-money" element={<MoveMoney />} />
+          <Route path="/history-payment" element={<HistoryPayment />} />
         </Routes>
       </div>
     </Router>

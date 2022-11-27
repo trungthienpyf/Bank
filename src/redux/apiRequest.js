@@ -13,6 +13,11 @@ import {
   sendMoneyStart,
   sendMoneySuccess,
 } from "./authSlice";
+import {
+  getPaymentFailed,
+  getPaymentStart,
+  getPaymentSuccess,
+} from "./paymentSlice";
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -79,5 +84,21 @@ export const sendMoney = async (user, dispatch, navigate, firstMoney) => {
   } catch (error) {
     if (error.message) dispatch(sendMoneyFailed(error.message));
     else dispatch(sendMoneyFailed(error));
+  }
+};
+export const getAllPayment = async (user, dispatch) => {
+  dispatch(getPaymentStart());
+  try {
+    const re = await axios.post("http://127.0.0.1:8000/api/getHistory", user);
+
+    if (re.data.errors) {
+      console.log(re.data.errors);
+      throw re.data.errors;
+    }
+
+    dispatch(getPaymentSuccess(re.data));
+  } catch (error) {
+    if (error.message) dispatch(getPaymentFailed(error.message));
+    else dispatch(getPaymentFailed(error));
   }
 };

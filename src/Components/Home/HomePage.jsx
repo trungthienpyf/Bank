@@ -34,7 +34,9 @@ const HomePage = () => {
               </Link>
             </div>
             <div className="home-col">
-              <button className="home-btn">Nhắc nợ</button>
+              <Link to="/history-payment">
+                <button className="home-btn">Lịch sử giao dịch</button>
+              </Link>
             </div>
           </div>
           <div className="home-row">
