@@ -19,7 +19,12 @@ const HistoryPayment = () => {
       getAllPayment(data, dispatch);
     }
   }, []);
-
+  const renderMoney = (m) => {
+    return Number(m).toLocaleString("it-IT", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
   console.log(listPayment);
   return (
     <>
@@ -42,12 +47,24 @@ const HistoryPayment = () => {
                         <button className="button-page-home color-btn-history history-content">
                           <div className="home-row-2">
                             <div className="">
-                              <div className="text-start">{content.id}</div>
                               <div className="text-start">
-                                <span>số tài khoản: {user?.accountNumber}</span>
+                                {user.accountNumber == content.fromAcc
+                                  ? "Chuyển tiền"
+                                  : "Nhận tiền"}
+                              </div>
+                              <div className="text-start">
+                                <span className="text-content-history">
+                                  Số tài khoản: {user?.accountNumber}{" "}
+                                  {content.desc &&
+                                    `| Noi Dung: ${content.desc}`}
+                                </span>
                               </div>
                             </div>
-                            <div className="home-col-d-column"></div>
+                            <div className="home-col-d-column">
+                              {user.accountNumber == content.fromAcc
+                                ? `- ${renderMoney(content.amount)} `
+                                : `+ ${renderMoney(content.amount)}`}
+                            </div>
                           </div>
                         </button>
                       );

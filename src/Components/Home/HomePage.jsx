@@ -11,6 +11,7 @@ const HomePage = () => {
     style: "currency",
     currency: "VND",
   });
+
   useEffect(() => {
     if (!user) {
       navigate("/login");
