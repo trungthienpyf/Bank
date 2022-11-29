@@ -122,7 +122,7 @@ export const storePost = async (user, dispatch, navigate) => {
     }
 
     dispatch(storePostSuccess(re.data));
-    // navigate("/post-sim");
+    navigate("/post-sim");
   } catch (error) {
     if (error.message) dispatch(storePostFailed(error.message));
     else dispatch(storePostFailed(error));
@@ -139,7 +139,6 @@ export const getAllPost = async (dispatch) => {
     }
 
     dispatch(getAllPostSuccess(re.data));
-    navigate("/post-sim");
   } catch (error) {
     if (error.message) dispatch(getAllPostFailed(error.message));
     else dispatch(getAllPostFailed(error));
