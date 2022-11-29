@@ -42,7 +42,9 @@ const HomePage = () => {
           </div>
           <div className="home-row">
             <div className="home-col">
-              <button className="home-btn">Top Up</button>
+              <Link to="/post-sim">
+                <button className="home-btn">Đấu giá sim</button>
+              </Link>
             </div>
             <div className="home-col">
               <button className="home-btn"> Thanh toán hóa đơn</button>

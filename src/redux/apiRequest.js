@@ -18,6 +18,14 @@ import {
   getPaymentStart,
   getPaymentSuccess,
 } from "./paymentSlice";
+import {
+  getAllPostFailed,
+  getAllPostStart,
+  getAllPostSuccess,
+  storePostFailed,
+  storePostStart,
+  storePostSuccess,
+} from "./postSimSlice";
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -100,5 +108,40 @@ export const getAllPayment = async (user, dispatch) => {
   } catch (error) {
     if (error.message) dispatch(getPaymentFailed(error.message));
     else dispatch(getPaymentFailed(error));
+  }
+};
+
+export const storePost = async (user, dispatch, navigate) => {
+  dispatch(storePostStart());
+  try {
+    const re = await axios.post("http://127.0.0.1:8000/api/storePost", user);
+
+    if (re.data.errors) {
+      console.log(re.data.errors);
+      throw re.data.errors;
+    }
+
+    dispatch(storePostSuccess(re.data));
+    // navigate("/post-sim");
+  } catch (error) {
+    if (error.message) dispatch(storePostFailed(error.message));
+    else dispatch(storePostFailed(error));
+  }
+};
+export const getAllPost = async (dispatch) => {
+  dispatch(getAllPostStart());
+  try {
+    const re = await axios.get("http://127.0.0.1:8000/api/getAllPost");
+
+    if (re.data.errors) {
+      console.log(re.data.errors);
+      throw re.data.errors;
+    }
+
+    dispatch(getAllPostSuccess(re.data));
+    navigate("/post-sim");
+  } catch (error) {
+    if (error.message) dispatch(getAllPostFailed(error.message));
+    else dispatch(getAllPostFailed(error));
   }
 };

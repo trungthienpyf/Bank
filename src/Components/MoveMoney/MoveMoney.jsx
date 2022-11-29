@@ -124,6 +124,7 @@ const MoveMoney = () => {
 
       <div className="home-page-main">
         <div className="home-page-width1 mt-2 ">
+          <h3> Chuyển tiền</h3>
           <form className="form-padding " onSubmit={handleMoveMoney}>
             {renderText()}
           </form>
