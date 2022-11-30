@@ -1,0 +1,149 @@
+$padding: 12px;
+$radius: 6px;
+$color: #333;
+$color-light: white;
+$primary-color: #3498db;
+$primary-color-light: lighten($primary-color, 40%);
+$bg-color-light: #ddd;
+
+$app-width: 750px;
+$app-height: 450px;
+$left-menu-width: 200px;
+
+$message-min-width: 75px;
+$message-max-width: ($app-width - $left-menu-width) / 1.5;
+$message-line-height: 20px;
+
+.app {
+  background-color: $bg-color-light;
+  width: $app-width;
+  height: $app-height;
+  box-shadow: 0 6px 6px rgba(0, 0, 0, 0.25), 0 2px 2px rgba(0, 0, 0, 0.22);
+  border-radius: $radius;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: row;
+
+  .contact-list {
+    background-color: $color-light;
+    width: $left-menu-width;
+    overflow: auto;
+
+    .title {
+      padding: $padding;
+      margin: 0;
+      padding-bottom: 0;
+      font-size: 150%;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: $padding;
+
+      li {
+        margin: $padding / 1.5 0;
+        padding: $padding / 1.5 $padding;
+        position: relative;
+        cursor: pointer;
+        transition: all 0.2s ease-out;
+
+        &.active,
+        &:hover {
+          background-color: $primary-color-light;
+          color: $primary-color;
+          border-radius: $radius;
+        }
+      }
+    }
+  }
+
+  .messages {
+    margin: $padding;
+    background-color: $color-light;
+    border-radius: $radius;
+    overflow: hidden;
+
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-direction: column;
+
+    .messages-history {
+      overflow: auto;
+
+      flex: 1 1 auto;
+
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: end;
+
+      .message {
+        width: 100%;
+        padding: $padding;
+        padding-top: 0;
+        text-align: start;
+        &:last-child {
+          padding-top: $padding;
+        }
+
+        &.me {
+          text-align: right;
+
+          .message-body {
+            color: $color-light;
+            background-color: $primary-color;
+          }
+        }
+
+        .message-body {
+          background-color: $bg-color-light;
+          color: $color;
+          font-weight: 400;
+          display: inline-block;
+          padding: $padding / 1.5 $padding;
+          border-radius: $radius;
+          max-width: $message-max-width;
+          min-width: $message-min-width;
+          line-height: $message-line-height;
+          text-align: initial;
+        }
+      }
+    }
+
+    .messages-inputs {
+      width: 100%;
+      display: flex;
+      flex-direction: row !important;
+      border: 2px solid #ccc;
+      margin-bottom: 4px;
+      select,
+      input[type="text"] {
+        padding: $padding;
+        resize: vertical;
+
+        flex-basis: 50%;
+      }
+
+      button {
+        padding: 12px 24px;
+        margin: 6px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+
+        &:hover {
+          i {
+            color: $primary-color;
+          }
+        }
+
+        i {
+          vertical-align: middle;
+          transition: all 0.2s ease-out;
+        }
+      }
+    }
+  }
+}

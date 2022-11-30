@@ -144,3 +144,14 @@ export const getAllPost = async (dispatch) => {
     else dispatch(getAllPostFailed(error));
   }
 };
+export const showEach = async (data) => {
+  const list = await axios
+    .post("http://127.0.0.1:8000/api/show", data)
+    .then(function (response) {
+      return response.data;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  return list;
+};
