@@ -1,12 +1,15 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import CountdownTimer from "../../CountTime/CountdownTimer";
+import UseButtonCountdown from "../../CountTime/UseButtonCountdown";
+
+import UseCountdown from "../../CountTime/UseCountdown";
 import { getAllPost } from "../../redux/apiRequest";
 import "./postSims.css";
 
+const now = new Date().getTime();
+
 const PostSims = () => {
-  //DUMMY DATA
   const user = useSelector((state) => state.auth.login?.currentUser);
   const listPost = useSelector((state) => state.postSim.getAllPost?.allPostSim);
   const navigate = useNavigate();
@@ -20,9 +23,15 @@ const PostSims = () => {
     const timeCreate = new Date(CREATED_TIME).getTime();
 
     const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
-    console.log(TIME_EXPIRE);
+
     return dateTime;
   }, []);
+
+  // const checkTime = (CREATED_TIME, TIME_EXPIRE, id) => {
+  //   const timeCreate = new Date(CREATED_TIME).getTime();
+
+  //   const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
+  // };
 
   return (
     <>
@@ -53,23 +62,25 @@ const PostSims = () => {
                   <div className="home-row-2">
                     <div className="">
                       <div className="text-start">Sim: {item.nameSim}</div>
-                      <div className="text-start">
-                        <span>
-                          Thời gian còn:
-                          <CountdownTimer
-                            targetDate={convertTime(
-                              item.created_at,
-                              item.timeSession
-                            )}
-                          />
-                        </span>
+
+                      <div className="text-start d-flex">
+                        <span>Thời gian còn:</span>
+                        <UseCountdown
+                          targetDate={convertTime(
+                            item.created_at,
+                            item.timeSession
+                          )}
+                        />
                       </div>
                     </div>
                     <div className="home-col-d-column">Mốc tiền hiện tại:</div>
                   </div>
-                  <Link to={`/post-sim/${item.id}`}>
-                    <button>Đấu giá ngay</button>
-                  </Link>
+                  <UseButtonCountdown
+                    targetDate={convertTime(item.created_at, item.timeSession)}
+                    id={item.id}
+                    CREATED_TIME={item.created_at}
+                    TIME_EXPIRE={item.timeSession}
+                  />
                 </button>
               </>
             );
