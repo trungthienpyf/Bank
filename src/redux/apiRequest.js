@@ -139,6 +139,7 @@ export const getAllPost = async (dispatch) => {
     }
 
     dispatch(getAllPostSuccess(re.data));
+    return re.data;
   } catch (error) {
     if (error.message) dispatch(getAllPostFailed(error.message));
     else dispatch(getAllPostFailed(error));

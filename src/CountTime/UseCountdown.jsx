@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 
-const now = new Date().getTime;
-const UseCountdown = ({ targetDate, id }) => {
-  const countDownDate = new Date(targetDate).getTime();
+const UseCountdown = (props) => {
+  const countDownDate = new Date(props.targetDate).getTime();
 
   const [countDown, setCountDown] = useState(
     countDownDate - new Date().getTime()
@@ -15,7 +14,7 @@ const UseCountdown = ({ targetDate, id }) => {
     }
 
     const interval = setInterval(() => {
-      setCountDown(countDownDate - new Date().getTime());
+      setCountDown(countDownDate - new Date().getTime() + props.increaseTime);
     }, 1000);
 
     return () => clearInterval(interval);

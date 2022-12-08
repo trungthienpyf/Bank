@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import UseButtonCountdown from "../../CountTime/UseButtonCountdown";
@@ -7,25 +13,25 @@ import UseCountdown from "../../CountTime/UseCountdown";
 import { getAllPost } from "../../redux/apiRequest";
 import "./postSims.css";
 
-const now = new Date().getTime();
-
 const PostSims = () => {
   const user = useSelector((state) => state.auth.login?.currentUser);
-  const listPost = useSelector((state) => state.postSim.getAllPost?.allPostSim);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
+  const listPost = useSelector((state) => state.postSim.getAllPost?.allPostSim);
+  const [data, setData] = useState();
   useEffect(() => {
-    getAllPost(dispatch);
+    getAllPost(dispatch).then((k) => {
+      setData(k);
+    });
   }, []);
 
-  const convertTime = useCallback((CREATED_TIME, TIME_EXPIRE) => {
+  const convertTime = (CREATED_TIME, TIME_EXPIRE, id) => {
     const timeCreate = new Date(CREATED_TIME).getTime();
 
     const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
-
+    console.log(id);
     return dateTime;
-  }, []);
+  };
 
   // const checkTime = (CREATED_TIME, TIME_EXPIRE, id) => {
   //   const timeCreate = new Date(CREATED_TIME).getTime();
@@ -55,7 +61,7 @@ const PostSims = () => {
               <h3>Danh sách đấu giá đang diễn ra</h3>
             </div>
           </div>
-          {listPost?.map((item) => {
+          {data?.map((item) => {
             return (
               <>
                 <button className="button-page-home cursor-disable">
@@ -70,6 +76,7 @@ const PostSims = () => {
                             item.created_at,
                             item.timeSession
                           )}
+                          increaseTime={0}
                         />
                       </div>
                     </div>

@@ -6,6 +6,8 @@ import Echo from "laravel-echo";
 
 import "./postSim.scss";
 import { showEach } from "../../redux/apiRequest";
+import UseCountdown from "../../CountTime/UseCountdown";
+import UseButtonRise from "../../CountTime/UseButtonRise";
 const PostSim = () => {
   window.io = require("socket.io-client");
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -15,32 +17,33 @@ const PostSim = () => {
   const [isLoad, setIsLoad] = useState(true);
   const [moneyCurrent, setMoneyCurrent] = useState(0);
   const [amount, setAmount] = useState(1);
-
-  const DAY_EXPIRE = 3600 * 1000;
-  const NOW_IN_MS = new Date().getTime();
-
-  const dateTimeAfterThreeDays = NOW_IN_MS + DAY_EXPIRE;
-
+  const [timeClick, setTimeClick] = useState(false);
+  const [increaseTime, setIncreaseTime] = useState(0);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    setTimeClick(true);
+    setTimeout(() => {
+      setTimeClick(false);
+    }, 5000);
     const data = {
       user_id: user.id,
       post_id: params.id,
       amount: amount,
     };
-
+    setIncreaseTime(60 * 5 * 1000);
     await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
   };
 
   const findMoney = list.find((i) => i.id == params.id);
-  // const convertTime = (CREATED_TIME, TIME_EXPIRE) => {
-  //   const timeCreate = new Date(CREATED_TIME).getTime();
 
-  //   const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
+  const convertTime = (CREATED_TIME, TIME_EXPIRE) => {
+    const timeCreate = new Date(CREATED_TIME).getTime();
 
-  //   return dateTime;
-  // };
+    const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
+
+    return dateTime;
+  };
 
   useEffect(async () => {
     const data = {
@@ -59,6 +62,7 @@ const PostSim = () => {
           user_id: e.user,
           post_id: e.post_id,
           amount: e.message,
+          created_at: e.time,
         };
         setListMsg((oldArray) => [data, ...oldArray]);
         console.log(e);
@@ -68,7 +72,6 @@ const PostSim = () => {
     await setListMsg(check);
     setIsLoad(false);
   }, []);
-  console.log(1);
 
   var sum = findMoney?.amountStart;
   const renderMoney = () => {
@@ -79,6 +82,10 @@ const PostSim = () => {
       style: "currency",
       currency: "VND",
     });
+  };
+  const converDateTime = (time) => {
+    const dt = new Date(time);
+    return dt.toLocaleString();
   };
   var x = Number(findMoney?.amountStart).toLocaleString("it-IT", {
     style: "currency",
@@ -95,10 +102,15 @@ const PostSim = () => {
           <div className="app">
             <div className="messages">
               <div>
-                Giá khởi điểm:{x} - Giá: {renderMoney()} -{" "}
-                {/* <UseCountdown
-                  targetDate={convertTime(created_at, timeSession)}
-                /> */}
+                <div>sim: asvv</div>
+                Giá khởi điểm:{x} - Giá đã lên: {renderMoney()} -
+                <UseCountdown
+                  targetDate={convertTime(
+                    findMoney.created_at,
+                    findMoney.timeSession
+                  )}
+                  increaseTime={increaseTime}
+                />
               </div>
               <div className="messages-history">
                 {listMsg?.map((item) => {
@@ -108,7 +120,10 @@ const PostSim = () => {
                         "message " + (item.user_id == user.id ? "me" : "")
                       }
                     >
-                      <div class="message-body">+ {item.amount}</div>
+                      <div class="message-body">
+                        <div> + {item.amount}</div>{" "}
+                        <small>{converDateTime(item.created_at)}</small>
+                      </div>
                     </div>
                   );
                 })}
@@ -119,9 +134,14 @@ const PostSim = () => {
                   <option value="2">2</option>
                   <option value="3">3</option>
                 </select>
-                <button>
-                  <i className="material-icons">Đấu giá</i>
-                </button>
+                <UseButtonRise
+                  targetDate={convertTime(
+                    findMoney.created_at,
+                    findMoney.timeSession
+                  )}
+                  increaseTime={increaseTime}
+                  timeClick={timeClick}
+                />
               </form>
             </div>
           </div>

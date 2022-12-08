@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import { storePost } from "../../redux/apiRequest";
+import { getAllPost, storePost } from "../../redux/apiRequest";
 
 import "./createSim.css";
 
