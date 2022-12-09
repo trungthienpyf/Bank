@@ -55,8 +55,8 @@ const HistoryPayment = () => {
                               <div className="text-start">
                                 <span className="text-content-history">
                                   Số tài khoản: {user?.accountNumber}{" "}
-                                  {content.desc &&
-                                    `| Noi Dung: ${content.desc}`}
+                                  {content.description &&
+                                    `| Nd: ${content.description}`}
                                 </span>
                               </div>
                             </div>

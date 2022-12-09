@@ -16,7 +16,8 @@ const PostSim = () => {
   const [listMsg, setListMsg] = useState([]);
   const [isLoad, setIsLoad] = useState(true);
   const [moneyCurrent, setMoneyCurrent] = useState(0);
-  const [amount, setAmount] = useState(1);
+  const [amount, setAmount] = useState(0);
+
   const [timeClick, setTimeClick] = useState(false);
   const [increaseTime, setIncreaseTime] = useState(0);
   const handleSubmit = async (e) => {
@@ -32,6 +33,7 @@ const PostSim = () => {
       amount: amount,
     };
     setIncreaseTime(60 * 5 * 1000);
+    setAmount(0);
     await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
   };
 
@@ -129,11 +131,52 @@ const PostSim = () => {
                 })}
               </div>
               <form className="messages-inputs" onSubmit={handleSubmit}>
-                <select onChange={(e) => setAmount(e.target.value)}>
+                {/* <select onChange={(e) => setAmount(e.target.value)}>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
-                </select>
+                </select> */}
+                <div class="selector">
+                  <span class="selecotr-item">
+                    <input
+                      type="radio"
+                      id="radio1"
+                      class="selector-item_radio"
+                      name="group1"
+                      value="100000"
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                    <label for="radio1" class="selector-item_label">
+                      100000
+                    </label>
+                  </span>
+                  <span class="selecotr-item">
+                    <input
+                      type="radio"
+                      id="radio2"
+                      name="group1"
+                      class="selector-item_radio"
+                      value="200000"
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                    <label for="radio2" class="selector-item_label">
+                      200000
+                    </label>
+                  </span>
+                  <span class="selecotr-item">
+                    <input
+                      type="radio"
+                      id="radio3"
+                      name="group1"
+                      class="selector-item_radio"
+                      value="500000"
+                      onChange={(e) => setAmount(e.target.value)}
+                    />
+                    <label for="radio3" class="selector-item_label">
+                      500000
+                    </label>
+                  </span>
+                </div>
                 <UseButtonRise
                   targetDate={convertTime(
                     findMoney.created_at,

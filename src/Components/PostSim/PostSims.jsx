@@ -25,11 +25,11 @@ const PostSims = () => {
     });
   }, []);
 
-  const convertTime = (CREATED_TIME, TIME_EXPIRE, id) => {
+  const convertTime = (CREATED_TIME, TIME_EXPIRE) => {
     const timeCreate = new Date(CREATED_TIME).getTime();
 
     const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
-    console.log(id);
+
     return dateTime;
   };
 
