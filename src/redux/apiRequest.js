@@ -47,6 +47,10 @@ export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
     const re = await axios.post("http://127.0.0.1:8000/api/register", user);
+    if (re.data.data) {
+      console.log(re.data);
+      throw re.data;
+    }
     if (re.data.errors) {
       console.log(re.data.errors);
       throw re.data.errors;
@@ -55,8 +59,10 @@ export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerSuccess());
     navigate("/login");
   } catch (error) {
-    if (error.message) dispatch(registerFailed(error.message));
-    else dispatch(registerFailed(error));
+    if (error.data) dispatch(registerFailed(error.data));
+    else if (error.message) {
+      dispatch(registerFailed(error.message));
+    } else dispatch(registerFailed(error));
   }
 };
 export const moveMoney = async (user, dispatch, navigate) => {

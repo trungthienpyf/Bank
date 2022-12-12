@@ -20,7 +20,7 @@ const PostSim = () => {
 
   const [timeClick, setTimeClick] = useState(false);
   const [increaseTime, setIncreaseTime] = useState(0);
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, created_at, timeSession) => {
     e.preventDefault();
 
     setTimeClick(true);
@@ -32,7 +32,13 @@ const PostSim = () => {
       post_id: params.id,
       amount: amount,
     };
-    setIncreaseTime(60 * 5 * 1000);
+    if (
+      convertTime(created_at, timeSession) - new Date().getTime() <=
+      60 * 1000
+    ) {
+      setIncreaseTime((item) => item + 60 * 5 * 1000);
+    }
+
     setAmount(0);
     await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
   };
@@ -130,12 +136,12 @@ const PostSim = () => {
                   );
                 })}
               </div>
-              <form className="messages-inputs" onSubmit={handleSubmit}>
-                {/* <select onChange={(e) => setAmount(e.target.value)}>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </select> */}
+              <form
+                className="messages-inputs"
+                onSubmit={(e) =>
+                  handleSubmit(e, findMoney.created_at, findMoney.timeSession)
+                }
+              >
                 <div class="selector">
                   <span class="selecotr-item">
                     <input

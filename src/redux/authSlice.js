@@ -12,6 +12,7 @@ const authSlice = createSlice({
       isFetching: false,
       error: false,
       success: false,
+      errorMessage: null,
     },
     moveMoney: {
       isFetching: false,
@@ -65,10 +66,11 @@ const authSlice = createSlice({
 
       state.register.error = false;
     },
-    registerFailed: (state) => {
+    registerFailed: (state, action) => {
       state.register.error = true;
       state.register.isFetching = false;
       state.register.success = false;
+      state.register.errorMessage = action.payload;
     },
     moveMoneyStart: (state) => {
       state.moveMoney.isFetching = true;

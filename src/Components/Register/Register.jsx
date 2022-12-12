@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/apiRequest";
+import { useFormik } from "formik";
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -13,8 +14,21 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const errorMessage = useSelector((state) => state.auth.login.errorMessage);
-  const isLoad = useSelector((state) => state.auth.register.isFetching);
+  const errorMessage = useSelector(
+    (state) => state.auth.register?.errorMessage
+  );
+  const isLoad = useSelector((state) => state.auth.register?.isFetching);
+
+  // const formik = useFormik({
+  //   initialValues: {
+  //     name: "",
+  //     username: "",
+  //     password: "",
+  //     cc: "",
+  //     phone: "",
+  //   },
+  // });
+
   const handleRegister = (e) => {
     e.preventDefault();
     const newUser = {
@@ -67,6 +81,12 @@ const Register = () => {
               placeholder="Vui lòng nhập điện thoại"
               onChange={(e) => setPhone(e.target.value)}
             />
+            <p>
+              {" "}
+              {Array.isArray(errorMessage)
+                ? errorMessage?.fullName[0]
+                : errorMessage}
+            </p>
             <button type="submit"> Create account </button>
           </form>
         </section>

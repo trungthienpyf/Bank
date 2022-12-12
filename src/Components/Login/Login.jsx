@@ -28,26 +28,26 @@ const Login = () => {
         </div>
       ) : (
         <section className="login-container">
-          <div className="login-title"> Log in</div>
+          <div className="login-title"> Đăng nhập</div>
           <form onSubmit={handleLogin}>
-            <label>USERNAME</label>
+            <label>Tài khoản</label>
             <input
               type="text"
               placeholder="Enter your username"
               onChange={(e) => setUsername(e.target.value)}
             />
-            <label>PASSWORD</label>
+            <label>Mật khẩu</label>
             <input
               type="password"
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
             />
             <p>{errorMessage}</p>
-            <button type="submit"> Continue </button>
+            <button type="submit"> Đăng nhập </button>
           </form>
-          <div className="login-register"> Don't have an account yet? </div>
+          <div className="login-register"> Bạn đã có tài khoản chưa? </div>
           <Link className="login-register-link" to="/register">
-            Register one for free
+            Đăng ký ngay
           </Link>
         </section>
       )}
