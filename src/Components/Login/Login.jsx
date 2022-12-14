@@ -33,13 +33,13 @@ const Login = () => {
             <label>Tài khoản</label>
             <input
               type="text"
-              placeholder="Enter your username"
+              placeholder="Nhập tài khoản"
               onChange={(e) => setUsername(e.target.value)}
             />
             <label>Mật khẩu</label>
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Nhập mật khẩu"
               onChange={(e) => setPassword(e.target.value)}
             />
             <small class="register-error">{errorMessage}</small>

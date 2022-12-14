@@ -49,7 +49,7 @@ const HomePage = () => {
               </Link>
             </div>
             <div className="home-col">
-              <button className="home-btn"> Thanh toán hóa đơn</button>
+              <button className="home-btn"> Vé số</button>
             </div>
           </div>
           <button className="button-page-home">
