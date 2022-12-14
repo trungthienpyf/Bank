@@ -1,30 +1,33 @@
-import {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
+
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import UseButtonCountdown from "../../CountTime/UseButtonCountdown";
 
 import UseCountdown from "../../CountTime/UseCountdown";
+import Modal from "../../Modal/Modal";
+import useModal from "../../Modal/useModal";
 import { getAllPost } from "../../redux/apiRequest";
+
 import "./postSims.css";
 
 const PostSims = () => {
   const { state } = useLocation();
 
-  if (state?.showToast) {
-    toast.success("Tạo đấu giá thành công");
-  }
+  useEffect(() => {
+    if (state?.showToast) {
+      toast.success("Tạo đấu giá thành công");
+    }
+  }, [state]);
+
+  const { isShowing, toggle, changeData } = useModal();
   const user = useSelector((state) => state.auth.login?.currentUser);
 
   const dispatch = useDispatch();
 
   const [data, setData] = useState();
+  const [idRoom, setIdRoom] = useState("");
   useEffect(() => {
     getAllPost(dispatch).then((k) => {
       setData(k);
@@ -39,14 +42,15 @@ const PostSims = () => {
     return dateTime;
   };
 
-  // const checkTime = (CREATED_TIME, TIME_EXPIRE, id) => {
-  //   const timeCreate = new Date(CREATED_TIME).getTime();
-
-  //   const dateTime = timeCreate + Number(TIME_EXPIRE) * 1000;
-  // };
-
   return (
     <>
+      <Modal
+        isShowing={isShowing}
+        hide={toggle}
+        phone={user?.phone}
+        user_id={user.id}
+        idRoom={idRoom}
+      />
       <ToastContainer />
       {user ? (
         <div className="home-top home-padding">{user.fullName} </div>
@@ -68,6 +72,7 @@ const PostSims = () => {
               <h3>Danh sách đấu giá đang diễn ra</h3>
             </div>
           </div>
+
           {data?.map((item) => {
             return (
               <>
@@ -89,12 +94,21 @@ const PostSims = () => {
                     </div>
                     <div className="home-col-d-column">Mốc tiền hiện tại:</div>
                   </div>
-                  <UseButtonCountdown
-                    targetDate={convertTime(item.created_at, item.timeSession)}
-                    id={item.id}
-                    CREATED_TIME={item.created_at}
-                    TIME_EXPIRE={item.timeSession}
-                  />
+                  {user.money < 1000000 ? (
+                    <>Bạn không đủ để tham gia đấu giá chơi</>
+                  ) : (
+                    <UseButtonCountdown
+                      targetDate={convertTime(
+                        item.created_at,
+                        item.timeSession
+                      )}
+                      id={item.id}
+                      CREATED_TIME={item.created_at}
+                      TIME_EXPIRE={item.timeSession}
+                      setIdRoom={setIdRoom}
+                      changeData={changeData}
+                    />
+                  )}
                 </button>
               </>
             );

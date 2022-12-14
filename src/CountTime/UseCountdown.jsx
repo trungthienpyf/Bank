@@ -8,7 +8,6 @@ const UseCountdown = (props) => {
     countDownDate - new Date().getTime()
   );
 
-  console.log(props.increaseTime);
   useEffect(() => {
     if (countDown <= 0) {
       return;

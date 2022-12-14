@@ -8,6 +8,7 @@ import "./postSim.scss";
 import { showEach } from "../../redux/apiRequest";
 import UseCountdown from "../../CountTime/UseCountdown";
 import UseButtonRise from "../../CountTime/UseButtonRise";
+import { toast, ToastContainer } from "react-toastify";
 const PostSim = () => {
   window.io = require("socket.io-client");
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -19,28 +20,40 @@ const PostSim = () => {
   const [amount, setAmount] = useState(0);
 
   const [timeClick, setTimeClick] = useState(false);
+  const [flagAmount, setFlagAmount] = useState(false);
   const [increaseTime, setIncreaseTime] = useState(0);
+
+  const handleChangeAmount = (e) => {
+    setAmount(e.target.value);
+    setFlagAmount(true);
+  };
+  console.log(amount);
   const handleSubmit = async (e, created_at, timeSession) => {
     e.preventDefault();
-
-    setTimeClick(true);
-    setTimeout(() => {
-      setTimeClick(false);
-    }, 5000);
-    const data = {
-      user_id: user.id,
-      post_id: params.id,
-      amount: amount,
-    };
-    if (
-      convertTime(created_at, timeSession) - new Date().getTime() <=
-      60 * 1000
-    ) {
-      setIncreaseTime((item) => item + 60 * 5 * 1000);
+    if (amount == 0) {
+      setFlagAmount(false);
+      toast.error("Vui lòng chọn giá");
     }
+    if (flagAmount) {
+      setTimeClick(true);
+      setTimeout(() => {
+        setTimeClick(false);
+      }, 5000);
+      const data = {
+        user_id: user.id,
+        post_id: params.id,
+        amount: amount,
+      };
+      if (
+        convertTime(created_at, timeSession) - new Date().getTime() <=
+        60 * 1000
+      ) {
+        setIncreaseTime((item) => item + 60 * 5 * 1000);
+      }
 
-    setAmount(0);
-    await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
+      setAmount(0);
+      await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
+    }
   };
 
   const findMoney = list.find((i) => i.id == params.id);
@@ -91,6 +104,12 @@ const PostSim = () => {
       currency: "VND",
     });
   };
+  const convertMoney = (money) => {
+    return Number(money).toLocaleString("it-IT", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
   const converDateTime = (time) => {
     const dt = new Date(time);
     return dt.toLocaleString();
@@ -101,6 +120,7 @@ const PostSim = () => {
   });
   return (
     <>
+      <ToastContainer />
       {isLoad ? (
         <div className="heigh-main">
           <div class="loader ">Loading... </div>
@@ -129,7 +149,7 @@ const PostSim = () => {
                       }
                     >
                       <div class="message-body">
-                        <div> + {item.amount}</div>{" "}
+                        <div> + {convertMoney(item.amount)}</div>{" "}
                         <small>{converDateTime(item.created_at)}</small>
                       </div>
                     </div>
@@ -150,10 +170,10 @@ const PostSim = () => {
                       class="selector-item_radio"
                       name="group1"
                       value="100000"
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={handleChangeAmount}
                     />
                     <label for="radio1" class="selector-item_label">
-                      100000
+                      100.000
                     </label>
                   </span>
                   <span class="selecotr-item">
@@ -163,10 +183,10 @@ const PostSim = () => {
                       name="group1"
                       class="selector-item_radio"
                       value="200000"
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={handleChangeAmount}
                     />
                     <label for="radio2" class="selector-item_label">
-                      200000
+                      200.000
                     </label>
                   </span>
                   <span class="selecotr-item">
@@ -176,10 +196,10 @@ const PostSim = () => {
                       name="group1"
                       class="selector-item_radio"
                       value="500000"
-                      onChange={(e) => setAmount(e.target.value)}
+                      onChange={handleChangeAmount}
                     />
                     <label for="radio3" class="selector-item_label">
-                      500000
+                      500.000
                     </label>
                   </span>
                 </div>
@@ -196,12 +216,6 @@ const PostSim = () => {
           </div>
         </div>
       )}
-      {/* <h1>hehe: {JSON.stringify(params)} </h1>
-      <div>
-        <h1>Countdown Timer</h1>
-        <CountdownTimer targetDate={dateTimeAfterThreeDays} />
-        <CountdownTimer targetDate={dateTimeAfterThreeDays} />
-      </div> */}
     </>
   );
 };

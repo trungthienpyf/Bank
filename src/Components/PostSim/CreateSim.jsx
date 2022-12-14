@@ -23,11 +23,14 @@ const CreateSim = () => {
   const [timeSession, setTimeSession] = useState("3600");
 
   const dispatch = useDispatch();
-
+  var reg = /^\d+$/;
   const handleChangeSim = (e) => {
     setErrorSim("");
     setNameSim(e.target.value);
-    if (e.target.value.trim().length == 0) {
+    if (!reg.test(e.target.value)) {
+      setFlagSim(false);
+      setErrorSim("Không được nhập kí tự chữ");
+    } else if (e.target.value.trim().length == 0) {
       setFlagSim(false);
       setErrorSim("Vui lòng nhập sim");
     } else if (e.target.value.length != 10) {
@@ -40,7 +43,10 @@ const CreateSim = () => {
   const handleChangeAmount = (e) => {
     setErrorAmount("");
     setAmountStart(e.target.value);
-    if (e.target.value.trim().length == 0) {
+    if (!reg.test(e.target.value)) {
+      setFlagAmount(false);
+      setErrorAmount("Không được nhập kí tự chữ");
+    } else if (e.target.value.trim().length == 0) {
       setFlagAmount(false);
       setErrorAmount("Vui lòng nhập giá khởi đầu");
     } else if (e.target.value.length < 6) {

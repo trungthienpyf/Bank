@@ -35,11 +35,13 @@ const MoveMoney = () => {
   const [errorStk, setErrorStk] = useState("");
 
   const dispatch = useDispatch();
-
+  var reg = /^\d+$/;
   const handleChangeMoney = (e) => {
     setErrorMoney("");
-
-    if (e.target.value.trim().length == 0) {
+    if (!reg.test(e.target.value)) {
+      setFlagMoney(false);
+      setErrorMoney("Không nhập kí tự chữ");
+    } else if (e.target.value.trim().length == 0) {
       setFlagMoney(false);
       setErrorMoney("Không được để trống");
     } else if (e.target.value.length < 5) {
@@ -52,7 +54,10 @@ const MoveMoney = () => {
   const handleChangeStk = (e) => {
     setErrorStk("");
     dispatch(moveMoneyRefresh());
-    if (e.target.value.trim().length == 0) {
+    if (!reg.test(e.target.value)) {
+      setFlagStk(false);
+      setErrorStk("Không nhập kí tự chữ");
+    } else if (e.target.value.trim().length == 0) {
       setFlagStk(false);
       setErrorStk("Không được để trống");
     } else if (e.target.value == user.accountNumber) {
@@ -80,7 +85,7 @@ const MoveMoney = () => {
           id: user.id,
           toAc: stk,
         };
-        moveMoney(newUser, dispatch, navigate, setFlagStk).then((i) => {
+        moveMoney(newUser, dispatch, navigate).then((i) => {
           if (i == false) {
             setStatus(false);
           } else {

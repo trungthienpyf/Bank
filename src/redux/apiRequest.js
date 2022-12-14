@@ -67,13 +67,13 @@ export const registerUser = async (user, dispatch, navigate) => {
     } else dispatch(registerFailed(error));
   }
 };
-export const moveMoney = async (user, dispatch, navigate, set) => {
+export const moveMoney = async (user, dispatch) => {
   dispatch(moveMoneyStart());
   try {
     const re = await axios.post("http://127.0.0.1:8000/api/getCode", user);
     if (re.data.data) {
       console.log(re.data);
-      set(false);
+
       throw re.data;
     }
     if (re.data.errors) {
@@ -82,7 +82,6 @@ export const moveMoney = async (user, dispatch, navigate, set) => {
     }
 
     dispatch(moveMoneySuccess());
-    navigate("/move-money");
   } catch (error) {
     if (error.data) dispatch(moveMoneyFailed(error.data));
     else if (error.message) dispatch(moveMoneyFailed(error.message));
