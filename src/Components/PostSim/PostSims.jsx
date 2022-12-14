@@ -6,7 +6,8 @@ import {
   useState,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 import UseButtonCountdown from "../../CountTime/UseButtonCountdown";
 
 import UseCountdown from "../../CountTime/UseCountdown";
@@ -14,10 +15,15 @@ import { getAllPost } from "../../redux/apiRequest";
 import "./postSims.css";
 
 const PostSims = () => {
+  const { state } = useLocation();
+
+  if (state?.showToast) {
+    toast.success("Tạo đấu giá thành công");
+  }
   const user = useSelector((state) => state.auth.login?.currentUser);
 
   const dispatch = useDispatch();
-  const listPost = useSelector((state) => state.postSim.getAllPost?.allPostSim);
+
   const [data, setData] = useState();
   useEffect(() => {
     getAllPost(dispatch).then((k) => {
@@ -41,6 +47,7 @@ const PostSims = () => {
 
   return (
     <>
+      <ToastContainer />
       {user ? (
         <div className="home-top home-padding">{user.fullName} </div>
       ) : (

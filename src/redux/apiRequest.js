@@ -1,4 +1,6 @@
 import axios from "axios";
+import { toast } from "react-toastify";
+
 import {
   loginFailed,
   loginStart,
@@ -65,10 +67,15 @@ export const registerUser = async (user, dispatch, navigate) => {
     } else dispatch(registerFailed(error));
   }
 };
-export const moveMoney = async (user, dispatch, navigate) => {
+export const moveMoney = async (user, dispatch, navigate, set) => {
   dispatch(moveMoneyStart());
   try {
     const re = await axios.post("http://127.0.0.1:8000/api/getCode", user);
+    if (re.data.data) {
+      console.log(re.data);
+      set(false);
+      throw re.data;
+    }
     if (re.data.errors) {
       console.log(re.data.errors);
       throw re.data.errors;
@@ -77,8 +84,10 @@ export const moveMoney = async (user, dispatch, navigate) => {
     dispatch(moveMoneySuccess());
     navigate("/move-money");
   } catch (error) {
-    if (error.message) dispatch(moveMoneyFailed(error.message));
+    if (error.data) dispatch(moveMoneyFailed(error.data));
+    else if (error.message) dispatch(moveMoneyFailed(error.message));
     else dispatch(moveMoneyFailed(error));
+    return false;
   }
 };
 export const sendMoney = async (user, dispatch, navigate, firstMoney) => {
@@ -94,12 +103,12 @@ export const sendMoney = async (user, dispatch, navigate, firstMoney) => {
     let sum = firstMoney - re.data;
 
     dispatch(sendMoneySuccess(sum));
-    navigate("/move-money");
   } catch (error) {
     if (error.message) dispatch(sendMoneyFailed(error.message));
     else dispatch(sendMoneyFailed(error));
   }
 };
+
 export const getAllPayment = async (user, dispatch) => {
   dispatch(getPaymentStart());
   try {
@@ -128,7 +137,8 @@ export const storePost = async (user, dispatch, navigate) => {
     }
 
     dispatch(storePostSuccess(re.data));
-    navigate("/post-sim");
+
+    navigate("/post-sim", { state: { showToast: true } });
   } catch (error) {
     if (error.message) dispatch(storePostFailed(error.message));
     else dispatch(storePostFailed(error));

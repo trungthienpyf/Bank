@@ -42,7 +42,7 @@ const Login = () => {
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <p>{errorMessage}</p>
+            <small class="register-error">{errorMessage}</small>
             <button type="submit"> Đăng nhập </button>
           </form>
           <div className="login-register"> Bạn đã có tài khoản chưa? </div>

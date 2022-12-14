@@ -18,7 +18,7 @@ const authSlice = createSlice({
       isFetching: false,
       error: false,
       success: false,
-      errorMessage: "",
+      errorMessage: null,
     },
     sendMoney: {
       isFetching: false,
@@ -87,6 +87,9 @@ const authSlice = createSlice({
       state.moveMoney.success = false;
       state.moveMoney.errorMessage = action.payload;
     },
+    moveMoneyRefresh: (state) => {
+      state.moveMoney.errorMessage = null;
+    },
   },
 });
 export const {
@@ -102,5 +105,6 @@ export const {
   sendMoneySuccess,
   sendMoneyFailed,
   sendMoneyStart,
+  moveMoneyRefresh,
 } = authSlice.actions;
 export default authSlice.reducer;

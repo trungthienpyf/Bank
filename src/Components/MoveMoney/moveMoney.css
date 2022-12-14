@@ -234,3 +234,9 @@
   margin-top: 3rem;
   font-size: 1.5rem;
 }
+
+.reset-tag-a {
+  text-decoration: none;
+  color: white;
+  display: block;
+}

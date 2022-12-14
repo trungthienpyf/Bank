@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import "./home.css";
 
 const HomePage = () => {
@@ -20,6 +21,7 @@ const HomePage = () => {
 
   return (
     <>
+      <ToastContainer />
       {user ? (
         <div className="home-top home-padding">{user.fullName} </div>
       ) : (
