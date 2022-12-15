@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import { moveMoney, sendMoney } from "../../redux/apiRequest";
+import { authentication } from "../../firebase";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import "./moveMoney.css";
 import "react-toastify/dist/ReactToastify.css";
-import { moveMoneyRefresh } from "../../redux/authSlice";
+import { moveMoneyRefresh, sendMoneyStart } from "../../redux/authSlice";
 const MoveMoney = () => {
   //DUMMY DATA
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -15,7 +17,9 @@ const MoveMoney = () => {
   const isShowGetCode = useSelector(
     (state) => state.auth.moveMoney?.isFetching
   );
+  console.log(isShowGetCode);
   const isShowCheck = useSelector((state) => state.auth.sendMoney?.isFetching);
+
   const errorMessageMoney = useSelector(
     (state) => state.auth.sendMoney?.errorMessage
   );
@@ -33,12 +37,16 @@ const MoveMoney = () => {
   const [desc, setDesc] = useState("");
   const [errorMoney, setErrorMoney] = useState("");
   const [errorStk, setErrorStk] = useState("");
+  const [errorToken, setErrorToken] = useState("");
 
   const dispatch = useDispatch();
   var reg = /^\d+$/;
   const handleChangeMoney = (e) => {
     setErrorMoney("");
-    if (!reg.test(e.target.value)) {
+    if (user.money < e.target.value) {
+      setFlagMoney(false);
+      setErrorMoney("Số tiền không đủ");
+    } else if (!reg.test(e.target.value)) {
       setFlagMoney(false);
       setErrorMoney("Không nhập kí tự chữ");
     } else if (e.target.value.trim().length == 0) {
@@ -81,6 +89,16 @@ const MoveMoney = () => {
 
     if (flagStk && flagMoney) {
       if (!status) {
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          "recapcha",
+          {
+            size: "invisible",
+            callback: (response) => {
+              // reCAPTCHA solved, allow signInWithPhoneNumber.
+            },
+          },
+          authentication
+        );
         const newUser = {
           id: user.id,
           toAc: stk,
@@ -89,21 +107,47 @@ const MoveMoney = () => {
           if (i == false) {
             setStatus(false);
           } else {
-            setStatus(true);
+            let appVerifier = window.recaptchaVerifier;
+            signInWithPhoneNumber(
+              authentication,
+              "+84" + user.phone.slice(1),
+
+              appVerifier
+            )
+              .then((confirmationResult) => {
+                window.confirmationResult = confirmationResult;
+                setStatus(true);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }
         });
       } else {
-        const newUser2 = {
-          id: user.id,
-          fromAc: user.accountNumber,
-          token,
-          amount: money,
-          desc,
-          toAc: stk,
-        };
-        sendMoney(newUser2, dispatch, navigate, user.money);
-        setIsSuccess(true);
-        toast.success("Giao dịch thành công");
+        if (token.length == 6) {
+          let confirmationResult = window.confirmationResult;
+          confirmationResult
+            .confirm(token)
+            .then((result) => {
+              // const user = result.user;
+              // console.log(user);
+              console.log("thanh cong");
+              const newUser2 = {
+                id: user.id,
+                fromAc: user.accountNumber,
+                token,
+                amount: money,
+                desc,
+                toAc: stk,
+              };
+              sendMoney(newUser2, dispatch, navigate, user.money);
+              setIsSuccess(true);
+              toast.success("Giao dịch thành công");
+            })
+            .catch((error) => {
+              setErrorToken("Nhập mã sai");
+            });
+        }
       }
     }
   };
@@ -177,8 +221,8 @@ const MoveMoney = () => {
                   id="otp"
                   onChange={(e) => setToken(e.target.value)}
                 />
-                {errorMessageMoney && (
-                  <small className="register-error">{errorMessageMoney}</small>
+                {errorToken && (
+                  <small className="register-error">{errorToken}</small>
                 )}{" "}
               </>
             )}
@@ -237,6 +281,7 @@ const MoveMoney = () => {
           </form>
         </div>
       </div>
+      <div id="recapcha"></div>
     </>
   );
 };

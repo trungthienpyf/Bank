@@ -2,7 +2,18 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-const UseButtonCountdown = ({ targetDate, id, setIdRoom, changeData }) => {
+const UseButtonCountdown = ({
+  targetDate,
+  id,
+  setIdRoom,
+  changeData,
+  fullName,
+  winner,
+  setNameSim,
+  sim,
+  user_id,
+  setUserID,
+}) => {
   const countDownDate = new Date(targetDate).getTime();
 
   const [countDown, setCountDown] = useState(
@@ -23,14 +34,40 @@ const UseButtonCountdown = ({ targetDate, id, setIdRoom, changeData }) => {
   return (
     <>
       {" "}
-      {countDown <= 0
-        ? "Người thắng"
-        : getReturnValues(countDown, id, setIdRoom, changeData)}
+      {countDown <= 0 ? (
+        <>
+          {winner == null || fullName == undefined ? (
+            <>Không có người tham gia</>
+          ) : (
+            <> Người thắng {fullName}</>
+          )}
+        </>
+      ) : (
+        getReturnValues(
+          countDown,
+          id,
+          setIdRoom,
+          changeData,
+          setNameSim,
+          sim,
+          user_id,
+          setUserID
+        )
+      )}
     </>
   );
 };
 
-const getReturnValues = (countDown, id, setIdRoom, changeData) => {
+const getReturnValues = (
+  countDown,
+  id,
+  setIdRoom,
+  changeData,
+  setNameSim,
+  sim,
+  user_id,
+  setUserID
+) => {
   // const days = Math.floor(countDown / (1000 * 60 * 60 * 24));
   const hours = Math.floor(
     (countDown % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
@@ -38,7 +75,15 @@ const getReturnValues = (countDown, id, setIdRoom, changeData) => {
   const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((countDown % (1000 * 60)) / 1000);
 
-  return <button onClick={(e) => changeData(id, setIdRoom)}> Đấu giá</button>;
+  return (
+    <button
+      onClick={(e) =>
+        changeData(id, setIdRoom, setNameSim, sim, user_id, setUserID)
+      }
+    >
+      Tham gia đấu giá
+    </button>
+  );
 };
 
 export default UseButtonCountdown;

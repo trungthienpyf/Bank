@@ -5,7 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const Modal = ({ isShowing, hide, phone, user_id, idRoom }) => {
+const Modal = ({
+  isShowing,
+  hide,
+  phone,
+  user_id,
+  idRoom,
+  nameSim,
+  userID,
+}) => {
   const [OTP, setOTP] = useState(false);
   const [ErrorOTP, setErrorOTP] = useState("");
   const [flagOTP, setFlagOTP] = useState(false);
@@ -14,31 +22,30 @@ const Modal = ({ isShowing, hide, phone, user_id, idRoom }) => {
     setErrorOTP("");
   };
   const navigate = useNavigate();
-  const authCode = async (user) => {
-    try {
-      const re = await axios.post(
-        "http://127.0.0.1:8000/api/authOTPRoom",
-        user
-      );
-      if (re.data.errors) {
-        console.log(re.data.errors);
-        throw re.data.errors;
-      }
-      navigate(`/post-sim/${idRoom}`);
-    } catch (error) {
-      if (error.message) setErrorOTP(error.message);
-      else setErrorOTP(error);
+  const authCode = (OTP) => {
+    if (OTP.length == 6) {
+      let confirmationResult = window.confirmationResult;
+      confirmationResult
+        .confirm(OTP)
+        .then((result) => {
+          // const user = result.user;
+          // console.log(user);
+          console.log("thanh cong");
+
+          navigate(`/post-sim/${idRoom}`, {
+            state: { sim: nameSim, userID: userID },
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          setErrorOTP("Mã OTP không đúng");
+        });
     }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newUser = {
-      id: user_id,
-      code: OTP,
-    };
-    if (OTP.length == 5) {
-      authCode(newUser);
-    }
+
+    authCode(OTP);
   };
   return isShowing
     ? ReactDOM.createPortal(

@@ -28,12 +28,20 @@ const PostSims = () => {
 
   const [data, setData] = useState();
   const [idRoom, setIdRoom] = useState("");
+  const [nameSim, setNameSim] = useState("");
+  const [userID, setUserID] = useState("");
+
   useEffect(() => {
     getAllPost(dispatch).then((k) => {
       setData(k);
     });
   }, []);
-
+  const convertMoney = (money) => {
+    return Number(money).toLocaleString("it-IT", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
   const convertTime = (CREATED_TIME, TIME_EXPIRE) => {
     const timeCreate = new Date(CREATED_TIME).getTime();
 
@@ -50,6 +58,8 @@ const PostSims = () => {
         phone={user?.phone}
         user_id={user.id}
         idRoom={idRoom}
+        nameSim={nameSim}
+        userID={userID}
       />
       <ToastContainer />
       {user ? (
@@ -62,6 +72,9 @@ const PostSims = () => {
         <div className="home-page-width">
           <div className="home-row">
             <div className="center-post-sim">
+              <Link to="/">
+                <button className="btn-create-post"> Về trang chủ</button>{" "}
+              </Link>
               <Link to="/create-post-sim">
                 <button className="btn-create-post"> Tạo đấu giá</button>{" "}
               </Link>
@@ -92,7 +105,9 @@ const PostSims = () => {
                         />
                       </div>
                     </div>
-                    <div className="home-col-d-column">Mốc tiền hiện tại:</div>
+                    <div className="home-col-d-column">
+                      Mốc tiền hiện tại: {convertMoney(item.amountStart)}
+                    </div>
                   </div>
                   {user.money < 1000000 ? (
                     <>Bạn không đủ để tham gia đấu giá chơi</>
@@ -102,11 +117,17 @@ const PostSims = () => {
                         item.created_at,
                         item.timeSession
                       )}
+                      fullName={item?.winnerName}
                       id={item.id}
                       CREATED_TIME={item.created_at}
                       TIME_EXPIRE={item.timeSession}
+                      winner={item.winner}
                       setIdRoom={setIdRoom}
                       changeData={changeData}
+                      setNameSim={setNameSim}
+                      sim={item.nameSim}
+                      user_id={item.user_id}
+                      setUserID={setUserID}
                     />
                   )}
                 </button>
@@ -114,6 +135,7 @@ const PostSims = () => {
             );
           })}
         </div>
+        <div id="recapcha"></div>
       </div>
     </>
   );

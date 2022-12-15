@@ -11,6 +11,8 @@ import HistoryPayment from "./Components/HistoryPayment/HistoryPayment";
 import CreateSim from "./Components/PostSim/CreateSim";
 import PostSims from "./Components/PostSim/PostSims";
 import PostSim from "./Components/PostSim/PostSim";
+import ProtectedRoutes from "./ProtectedRoutes";
+import ProtectedRoutesLog from "./ProtectedRoutesLog";
 
 function App() {
   return (
@@ -18,15 +20,21 @@ function App() {
       <NavBar />
       <div className="App">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/move-money" element={<MoveMoney />} />
-          <Route path="/history-payment" element={<HistoryPayment />} />
-          <Route path="/post-sim" element={<PostSims />} />
+          <Route element={<ProtectedRoutesLog />}>
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+          </Route>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/" element={<HomePage />} />
 
-          <Route path="/post-sim/:id" element={<PostSim />} />
-          <Route path="/create-post-sim" element={<CreateSim />} />
+            <Route path="/move-money" element={<MoveMoney />} />
+            <Route path="/history-payment" element={<HistoryPayment />} />
+            <Route path="/post-sim" element={<PostSims />} />
+
+            <Route path="/post-sim/:id" element={<PostSim />} />
+            <Route path="/create-post-sim" element={<CreateSim />} />
+          </Route>
+          <Route path="*" element={<>404 not found</>} />
         </Routes>
       </div>
     </Router>

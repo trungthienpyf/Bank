@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import Echo from "laravel-echo";
 
 import "./postSim.scss";
@@ -10,6 +10,8 @@ import UseCountdown from "../../CountTime/UseCountdown";
 import UseButtonRise from "../../CountTime/UseButtonRise";
 import { toast, ToastContainer } from "react-toastify";
 const PostSim = () => {
+  const { state } = useLocation();
+
   window.io = require("socket.io-client");
   const user = useSelector((state) => state.auth.login?.currentUser);
   const list = useSelector((state) => state.postSim.getAllPost?.allPostSim);
@@ -26,6 +28,10 @@ const PostSim = () => {
   const handleChangeAmount = (e) => {
     setAmount(e.target.value);
     setFlagAmount(true);
+    if (e.target.value > user.money) {
+      setFlagAmount(false);
+      toast.error("Tài khoản không đủ....");
+    }
   };
   console.log(amount);
   const handleSubmit = async (e, created_at, timeSession) => {
@@ -51,7 +57,6 @@ const PostSim = () => {
         setIncreaseTime((item) => item + 60 * 5 * 1000);
       }
 
-      setAmount(0);
       await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
     }
   };
@@ -118,6 +123,7 @@ const PostSim = () => {
     style: "currency",
     currency: "VND",
   });
+  console.log(state.userID);
   return (
     <>
       <ToastContainer />
@@ -130,7 +136,7 @@ const PostSim = () => {
           <div className="app">
             <div className="messages">
               <div>
-                <div>sim: asvv</div>
+                <div>sim: {state?.sim}</div>
                 Giá khởi điểm:{x} - Giá đã lên: {renderMoney()} -
                 <UseCountdown
                   targetDate={convertTime(
@@ -156,66 +162,75 @@ const PostSim = () => {
                   );
                 })}
               </div>
-              <form
-                className="messages-inputs"
-                onSubmit={(e) =>
-                  handleSubmit(e, findMoney.created_at, findMoney.timeSession)
-                }
-              >
-                <div class="selector">
-                  <span class="selecotr-item">
-                    <input
-                      type="radio"
-                      id="radio1"
-                      class="selector-item_radio"
-                      name="group1"
-                      value="100000"
-                      onChange={handleChangeAmount}
-                    />
-                    <label for="radio1" class="selector-item_label">
-                      100.000
-                    </label>
-                  </span>
-                  <span class="selecotr-item">
-                    <input
-                      type="radio"
-                      id="radio2"
-                      name="group1"
-                      class="selector-item_radio"
-                      value="200000"
-                      onChange={handleChangeAmount}
-                    />
-                    <label for="radio2" class="selector-item_label">
-                      200.000
-                    </label>
-                  </span>
-                  <span class="selecotr-item">
-                    <input
-                      type="radio"
-                      id="radio3"
-                      name="group1"
-                      class="selector-item_radio"
-                      value="500000"
-                      onChange={handleChangeAmount}
-                    />
-                    <label for="radio3" class="selector-item_label">
-                      500.000
-                    </label>
-                  </span>
-                </div>
-                <UseButtonRise
-                  targetDate={convertTime(
-                    findMoney.created_at,
-                    findMoney.timeSession
-                  )}
-                  increaseTime={increaseTime}
-                  timeClick={timeClick}
-                />
-              </form>
+              {user.id == state?.userID ? (
+                <>Là chủ vật phẩm không thể đấu giá - chỉ xem</>
+              ) : (
+                <form
+                  className="messages-inputs"
+                  onSubmit={(e) =>
+                    handleSubmit(e, findMoney.created_at, findMoney.timeSession)
+                  }
+                >
+                  <div class="selector">
+                    <span class="selecotr-item">
+                      <input
+                        type="radio"
+                        id="radio1"
+                        class="selector-item_radio"
+                        name="group1"
+                        value="100000"
+                        onChange={handleChangeAmount}
+                      />
+                      <label for="radio1" class="selector-item_label">
+                        100.000
+                      </label>
+                    </span>
+                    <span class="selecotr-item">
+                      <input
+                        type="radio"
+                        id="radio2"
+                        name="group1"
+                        class="selector-item_radio"
+                        value="200000"
+                        onChange={handleChangeAmount}
+                      />
+                      <label for="radio2" class="selector-item_label">
+                        200.000
+                      </label>
+                    </span>
+                    <span class="selecotr-item">
+                      <input
+                        type="radio"
+                        id="radio3"
+                        name="group1"
+                        class="selector-item_radio"
+                        value="500000"
+                        onChange={handleChangeAmount}
+                      />
+                      <label for="radio3" class="selector-item_label">
+                        500.000
+                      </label>
+                    </span>
+                  </div>
+                  <UseButtonRise
+                    targetDate={convertTime(
+                      findMoney.created_at,
+                      findMoney.timeSession
+                    )}
+                    increaseTime={increaseTime}
+                    timeClick={timeClick}
+                  />
+                </form>
+              )}
             </div>
           </div>
         </div>
       )}
+
+      <Link to="/post-sim">
+        {" "}
+        <button>Trở về trang trước</button>
+      </Link>
     </>
   );
 };
