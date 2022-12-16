@@ -22,7 +22,7 @@ const Register = () => {
   const [errorPhone, setErrorPhone] = useState("");
 
   const checkPhone = async (phone) => {
-    return await axios.post("http://127.0.0.1:8000/api/checkPhone", {
+    return await axios.post("https://mfw060.wcom.vn/api/checkPhone", {
       phone: phone,
     });
   };

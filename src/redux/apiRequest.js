@@ -32,7 +32,7 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post("http://127.0.0.1:8000/api/login", user);
+    const res = await axios.post("https://mfw060.wcom.vn/api/login", user);
 
     if (res.data.errors) {
       console.log(res.data.errors);
@@ -48,7 +48,7 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    const re = await axios.post("http://127.0.0.1:8000/api/register", user);
+    const re = await axios.post("https://mfw060.wcom.vn/api/register", user);
     if (re.data.data) {
       console.log(re.data);
       throw re.data;
@@ -70,7 +70,7 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const moveMoney = async (user, dispatch) => {
   dispatch(moveMoneyStart());
   try {
-    const re = await axios.post("http://127.0.0.1:8000/api/getCode", user);
+    const re = await axios.post("https://mfw060.wcom.vn/api/getCode", user);
     if (re.data.data) {
       console.log(re.data);
 
@@ -91,7 +91,7 @@ export const moveMoney = async (user, dispatch) => {
 };
 export const sendMoney = async (user, dispatch, navigate, firstMoney) => {
   try {
-    const re = await axios.post("http://127.0.0.1:8000/api/checkCode", user);
+    const re = await axios.post("https://mfw060.wcom.vn/api/checkCode", user);
 
     if (re.data.errors) {
       console.log(re.data.errors);
@@ -110,7 +110,7 @@ export const sendMoney = async (user, dispatch, navigate, firstMoney) => {
 export const getAllPayment = async (user, dispatch) => {
   dispatch(getPaymentStart());
   try {
-    const re = await axios.post("http://127.0.0.1:8000/api/getHistory", user);
+    const re = await axios.post("https://mfw060.wcom.vn/api/getHistory", user);
 
     if (re.data.errors) {
       console.log(re.data.errors);
@@ -127,7 +127,7 @@ export const getAllPayment = async (user, dispatch) => {
 export const storePost = async (user, dispatch, navigate) => {
   dispatch(storePostStart());
   try {
-    const re = await axios.post("http://127.0.0.1:8000/api/storePost", user);
+    const re = await axios.post("https://mfw060.wcom.vn/api/storePost", user);
 
     if (re.data.errors) {
       console.log(re.data.errors);
@@ -145,7 +145,7 @@ export const storePost = async (user, dispatch, navigate) => {
 export const getAllPost = async (dispatch) => {
   dispatch(getAllPostStart());
   try {
-    const re = await axios.get("http://127.0.0.1:8000/api/getAllPost");
+    const re = await axios.get("https://mfw060.wcom.vn/api/getAllPost");
 
     if (re.data.errors) {
       console.log(re.data.errors);
@@ -161,7 +161,7 @@ export const getAllPost = async (dispatch) => {
 };
 export const showEach = async (data) => {
   const list = await axios
-    .post("http://127.0.0.1:8000/api/show", data)
+    .post("https://mfw060.wcom.vn/api/show", data)
     .then(function (response) {
       return response.data;
     })

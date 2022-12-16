@@ -16,7 +16,7 @@ const NavBar = () => {
       <div className="font-big">BankBank</div>{" "}
       {user ? (
         <>
-          <div>
+          <div className="d-flex">
             <Link to="/" className="navbar-home">
               {" "}
               Trang chủ{" "}
@@ -32,7 +32,7 @@ const NavBar = () => {
         </>
       ) : (
         <>
-          <div>
+          <div className="d-flex">
             <Link to="/login" className="navbar-login">
               {" "}
               Đăng nhập{" "}

@@ -50,7 +50,7 @@ const MoveMoney = () => {
   const dispatch = useDispatch();
   var reg = /^\d+$/;
   const getAllUser = async () => {
-    return await axios.get("http://127.0.0.1:8000/api/getAllUser");
+    return await axios.get("https://mfw060.wcom.vn/api/getAllUser");
   };
   useEffect(() => {
     getAllUser().then((k) => {

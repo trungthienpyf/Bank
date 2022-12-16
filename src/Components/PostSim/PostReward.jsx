@@ -35,7 +35,7 @@ const PostReward = () => {
     const data = {
       id: user?.id,
     };
-    return await axios.post("http://127.0.0.1:8000/api/showPostReward", data);
+    return await axios.post("https://mfw060.wcom.vn/api/showPostReward", data);
   };
   useEffect(() => {
     getPostUser().then((k) => {

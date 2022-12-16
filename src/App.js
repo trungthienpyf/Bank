@@ -1,6 +1,6 @@
 import "./App.css";
 import HomePage from "./Components/Home/HomePage";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import Login from "./Components/Login/Login";
 import Register from "./Components/Register/Register";
 import NavBar from "./Components/NavBar/NavBar";
@@ -18,7 +18,7 @@ import PostByUser from "./Components/PostSim/PostByUser";
 
 function App() {
   return (
-    <Router>
+    <HashRouter>
       <NavBar />
       <div className="App">
         <Routes>
@@ -41,7 +41,7 @@ function App() {
           <Route path="*" element={<>404 not found</>} />
         </Routes>
       </div>
-    </Router>
+    </HashRouter>
   );
 }
 

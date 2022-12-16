@@ -61,7 +61,7 @@ const PostSim = () => {
         setIncreaseTime((item) => item + 60 * 5 * 1000);
       }
 
-      await axios.post("http://127.0.0.1:8000/api/sendAmount", data);
+      await axios.post("https://mfw060.wcom.vn/api/sendAmount", data);
     }
   };
 
