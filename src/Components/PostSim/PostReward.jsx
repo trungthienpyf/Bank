@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -12,7 +13,7 @@ import { getAllPost } from "../../redux/apiRequest";
 
 import "./postSims.css";
 
-const PostSims = () => {
+const PostReward = () => {
   const { state } = useLocation();
 
   useEffect(() => {
@@ -26,14 +27,20 @@ const PostSims = () => {
 
   const dispatch = useDispatch();
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState();
   const [idRoom, setIdRoom] = useState("");
   const [nameSim, setNameSim] = useState("");
   const [userID, setUserID] = useState("");
-
+  const getPostUser = async () => {
+    const data = {
+      id: user?.id,
+    };
+    return await axios.post("http://127.0.0.1:8000/api/showPostReward", data);
+  };
   useEffect(() => {
-    getAllPost(dispatch).then((k) => {
-      setData(k);
+    getPostUser().then((k) => {
+      console.log(k.data);
+      setData(k.data);
     });
   }, []);
   const convertMoney = (money) => {
@@ -72,8 +79,8 @@ const PostSims = () => {
         <div className="home-page-width">
           <div className="home-row">
             <div className="center-post-sim">
-              <Link to="/">
-                <button className="btn-create-post"> Về trang chủ</button>{" "}
+              <Link to="/post-sim">
+                <button className="btn-create-post"> Về trang trước</button>{" "}
               </Link>
               <Link to="/create-post-sim">
                 <button className="btn-create-post"> Tạo đấu giá</button>{" "}
@@ -95,11 +102,12 @@ const PostSims = () => {
           </div>
           <div className="home-row-2">
             <div className="">
-              <h3>Danh sách đấu giá đang diễn ra</h3>
+              <h3>Danh sách đấu giá đã tạo</h3>
             </div>
           </div>
-          {data != null ? (
+          {data ? (
             <>
+              {" "}
               {data?.map((item) => {
                 return (
                   <>
@@ -150,10 +158,10 @@ const PostSims = () => {
                     </button>
                   </>
                 );
-              })}
+              })}{" "}
             </>
           ) : (
-            <>Không tìm thấy!!</>
+            <>Không được tìm thấy!!</>
           )}
         </div>
         <div id="recapcha"></div>
@@ -162,4 +170,4 @@ const PostSims = () => {
   );
 };
 
-export default PostSims;
+export default PostReward;

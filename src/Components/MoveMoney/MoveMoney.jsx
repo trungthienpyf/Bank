@@ -7,7 +7,14 @@ import { authentication } from "../../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import "./moveMoney.css";
 import "react-toastify/dist/ReactToastify.css";
-import { moveMoneyRefresh, sendMoneyStart } from "../../redux/authSlice";
+import {
+  moveMoneyRefresh,
+  moveMoneyStart,
+  sendMoneyStart,
+} from "../../redux/authSlice";
+import ReactSelect from "react-select";
+import axios from "axios";
+
 const MoveMoney = () => {
   //DUMMY DATA
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -34,6 +41,7 @@ const MoveMoney = () => {
   const [token, setToken] = useState("");
 
   const [money, setMoney] = useState("");
+  const [data, setData] = useState("");
   const [desc, setDesc] = useState("");
   const [errorMoney, setErrorMoney] = useState("");
   const [errorStk, setErrorStk] = useState("");
@@ -41,6 +49,15 @@ const MoveMoney = () => {
 
   const dispatch = useDispatch();
   var reg = /^\d+$/;
+  const getAllUser = async () => {
+    return await axios.get("http://127.0.0.1:8000/api/getAllUser");
+  };
+  useEffect(() => {
+    getAllUser().then((k) => {
+      setData(k.data.filter((i) => i.id !== user.id));
+    });
+  }, []);
+
   const handleChangeMoney = (e) => {
     setErrorMoney("");
     if (user.money < e.target.value) {
@@ -62,18 +79,19 @@ const MoveMoney = () => {
   const handleChangeStk = (e) => {
     setErrorStk("");
     dispatch(moveMoneyRefresh());
-    if (!reg.test(e.target.value)) {
+    if (!reg.test(e.value)) {
       setFlagStk(false);
       setErrorStk("Không nhập kí tự chữ");
-    } else if (e.target.value.trim().length == 0) {
+    } else if (e.value.trim().length == 0) {
       setFlagStk(false);
       setErrorStk("Không được để trống");
-    } else if (e.target.value == user.accountNumber) {
+    } else if (e.value == user.accountNumber) {
       setFlagStk(false);
       setErrorStk("Vui lòng nhập số tài khoản khác");
     } else setFlagStk(true);
 
-    setStk(e.target.value);
+    setStk(e.value);
+    console.log(e.value);
   };
 
   const handleMoveMoney = (e) => {
@@ -89,6 +107,7 @@ const MoveMoney = () => {
 
     if (flagStk && flagMoney) {
       if (!status) {
+        dispatch(moveMoneyStart);
         window.recaptchaVerifier = new RecaptchaVerifier(
           "recapcha",
           {
@@ -174,14 +193,17 @@ const MoveMoney = () => {
         <label className="f-left">
           {isSuccess ? "Đến số tài khoản" : "Số tài khoản "}
         </label>
-        <input
-          className="full-width input-payment"
+
+        <ReactSelect
+          options={data}
+          isSearchable={true}
           placeholder="Nhập số tài khoản"
-          onChange={handleChangeStk}
+          onChange={(item) => handleChangeStk(item)}
           readOnly={status}
-          value={stk}
         />
+
         {errorStk && <small className="register-error">{errorStk}</small>}
+
         {Array.isArray(errorMessage?.toAc)
           ? errorMessage?.toAc[0]
           : errorMessage}
@@ -196,6 +218,7 @@ const MoveMoney = () => {
           readOnly={status}
           value={money}
         />
+
         {errorMoney && <small className="register-error">{errorMoney}</small>}
         <label className="f-left">Mô tả</label>
         <textarea

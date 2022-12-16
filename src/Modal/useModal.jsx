@@ -29,35 +29,42 @@ const useModal = () => {
     setUserId(user_id);
 
     setIsShowing(!isShowing);
-    const newUser = {
-      id: user.id,
-      toAc: "045704070000307",
-    };
 
-    window.recaptchaVerifier = new RecaptchaVerifier(
-      "recapcha",
-      {
-        size: "invisible",
-        callback: (response) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
+    if (user.id != user_id) {
+      const newUser = {
+        id: user.id,
+        toAc: "045704070000307",
+      };
+
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recapcha",
+        {
+          size: "invisible",
+          callback: (response) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+          },
         },
-      },
-      authentication
-    );
+        authentication
+      );
 
-    let appVerifier = window.recaptchaVerifier;
-    signInWithPhoneNumber(
-      authentication,
-      "+84" + user.phone.slice(1),
+      let appVerifier = window.recaptchaVerifier;
+      signInWithPhoneNumber(
+        authentication,
+        "+84" + user.phone.slice(1),
 
-      appVerifier
-    )
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-      })
-      .catch((error) => {
-        console.log(error);
+        appVerifier
+      )
+        .then((confirmationResult) => {
+          window.confirmationResult = confirmationResult;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      navigate(`/post-sim/${ids}`, {
+        state: { sim: sim, userID: user_id, isAccess: true },
       });
+    }
   };
   return {
     isShowing,

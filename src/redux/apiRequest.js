@@ -90,7 +90,6 @@ export const moveMoney = async (user, dispatch) => {
   }
 };
 export const sendMoney = async (user, dispatch, navigate, firstMoney) => {
-  dispatch(sendMoneyStart());
   try {
     const re = await axios.post("http://127.0.0.1:8000/api/checkCode", user);
 

@@ -13,6 +13,8 @@ import PostSims from "./Components/PostSim/PostSims";
 import PostSim from "./Components/PostSim/PostSim";
 import ProtectedRoutes from "./ProtectedRoutes";
 import ProtectedRoutesLog from "./ProtectedRoutesLog";
+import PostReward from "./Components/PostSim/PostReward";
+import PostByUser from "./Components/PostSim/PostByUser";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
 
             <Route path="/post-sim/:id" element={<PostSim />} />
             <Route path="/create-post-sim" element={<CreateSim />} />
+            <Route path="/post-reward" element={<PostReward />} />
+            <Route path="/post-by-user" element={<PostByUser />} />
           </Route>
           <Route path="*" element={<>404 not found</>} />
         </Routes>

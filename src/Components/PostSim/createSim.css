@@ -103,7 +103,7 @@
   justify-content: center;
 }
 .home-page-width1 {
-  max-width: 720px;
+  min-width: 720px;
   background-color: #fff;
 }
 .home-row {

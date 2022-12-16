@@ -14,6 +14,8 @@ const Modal = ({
   nameSim,
   userID,
 }) => {
+  const user = useSelector((state) => state.auth.login?.currentUser);
+
   const [OTP, setOTP] = useState(false);
   const [ErrorOTP, setErrorOTP] = useState("");
   const [flagOTP, setFlagOTP] = useState(false);
@@ -33,7 +35,7 @@ const Modal = ({
           console.log("thanh cong");
 
           navigate(`/post-sim/${idRoom}`, {
-            state: { sim: nameSim, userID: userID },
+            state: { sim: nameSim, userID: userID, isAccess: true },
           });
         })
         .catch((error) => {

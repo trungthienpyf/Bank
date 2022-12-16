@@ -21,6 +21,7 @@ const CreateSim = () => {
   const [errorAmount, setErrorAmount] = useState("");
 
   const [timeSession, setTimeSession] = useState("3600");
+  var regexPhone = /(09|01|03|07|08)[0-9]{8}$/;
 
   const dispatch = useDispatch();
   var reg = /^\d+$/;
@@ -34,6 +35,9 @@ const CreateSim = () => {
       setFlagSim(false);
       setErrorSim("Vui lòng nhập sim");
     } else if (e.target.value.length != 10) {
+      setFlagSim(false);
+      setErrorSim("Vui lòng nhập đúng sim");
+    } else if (!regexPhone.test(e.target.value)) {
       setFlagSim(false);
       setErrorSim("Vui lòng nhập đúng sim");
     } else {

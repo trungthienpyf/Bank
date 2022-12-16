@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import Echo from "laravel-echo";
 
 import "./postSim.scss";
@@ -11,6 +11,10 @@ import UseButtonRise from "../../CountTime/UseButtonRise";
 import { toast, ToastContainer } from "react-toastify";
 const PostSim = () => {
   const { state } = useLocation();
+  const navigate = useNavigate();
+  if (!state?.isAccess) {
+    navigate("/post-sim");
+  }
 
   window.io = require("socket.io-client");
   const user = useSelector((state) => state.auth.login?.currentUser);
@@ -33,7 +37,7 @@ const PostSim = () => {
       toast.error("Tài khoản không đủ....");
     }
   };
-  console.log(amount);
+
   const handleSubmit = async (e, created_at, timeSession) => {
     e.preventDefault();
     if (amount == 0) {
@@ -104,7 +108,7 @@ const PostSim = () => {
     listMsg?.forEach((e) => {
       sum = parseInt(sum) + parseInt(e.amount);
     });
-    return sum.toLocaleString("it-IT", {
+    return Number(sum).toLocaleString("it-IT", {
       style: "currency",
       currency: "VND",
     });
@@ -123,7 +127,7 @@ const PostSim = () => {
     style: "currency",
     currency: "VND",
   });
-  console.log(state.userID);
+
   return (
     <>
       <ToastContainer />

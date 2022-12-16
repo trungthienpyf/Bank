@@ -4,7 +4,10 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/apiRequest";
 import { useFormik } from "formik";
+import { authentication } from "../../firebase";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import * as Yup from "yup";
+import axios from "axios";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -13,6 +16,16 @@ const Register = () => {
     (state) => state.auth.register?.errorMessage
   );
   const isLoad = useSelector((state) => state.auth.register?.isFetching);
+  const [flag, setFlag] = useState(false);
+  const [token, setToken] = useState("");
+  const [errorToken, setErrorToken] = useState("");
+  const [errorPhone, setErrorPhone] = useState("");
+
+  const checkPhone = async (phone) => {
+    return await axios.post("http://127.0.0.1:8000/api/checkPhone", {
+      phone: phone,
+    });
+  };
 
   const formik = useFormik({
     initialValues: {
@@ -45,12 +58,57 @@ const Register = () => {
         ),
     }),
     onSubmit: (values) => {
-      registerUser(values, dispatch, navigate);
+      setErrorPhone("");
+      checkPhone(values.phone).then((k) => {
+        if (k.data == "00") {
+          setFlag(true);
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            "recapcha",
+            {
+              size: "invisible",
+              callback: (response) => {
+                // reCAPTCHA solved, allow signInWithPhoneNumber.
+              },
+            },
+            authentication
+          );
+
+          let appVerifier = window.recaptchaVerifier;
+          signInWithPhoneNumber(
+            authentication,
+            "+84" + values.phone.slice(1),
+            appVerifier
+          )
+            .then((confirmationResult) => {
+              window.confirmationResult = confirmationResult;
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          setErrorPhone("Số điện thoại đã tồn tại trong hệ thống");
+        }
+      });
+
+      if (token.length == 6) {
+        let confirmationResult = window.confirmationResult;
+        confirmationResult
+          .confirm(token)
+          .then((result) => {
+            console.log("thanh cong");
+
+            registerUser(values, dispatch, navigate);
+          })
+          .catch((error) => {
+            setErrorToken("Nhập sai mã OTP");
+          });
+      }
     },
   });
 
   return (
     <>
+      <div id="recapcha"></div>
       {isLoad ? (
         <div className="heigh-main">
           <div class="loader ">Loading... </div>
@@ -126,6 +184,29 @@ const Register = () => {
                 ? errorMessage.phone[0]
                 : errorMessage}
             </small>
+            {errorPhone && (
+              <small className="register-error">{errorPhone}</small>
+            )}{" "}
+            {!flag ? (
+              ""
+            ) : (
+              <>
+                {" "}
+                <label>
+                  Chúng tôi đã gửi mã OTP đến số điện thoại{" "}
+                  {formik.values.phone}
+                </label>
+                <input
+                  className="full-width input-payment p-1"
+                  placeholder="Nhập code để xác minh"
+                  id="otp"
+                  onChange={(e) => setToken(e.target.value)}
+                />
+                {errorToken && (
+                  <small className="register-error">{errorToken}</small>
+                )}{" "}
+              </>
+            )}
             <button type="submit"> Đăng ký </button>
           </form>
         </section>

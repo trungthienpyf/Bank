@@ -13,32 +13,37 @@ const NavBar = () => {
   };
   return (
     <nav className="navbar-container">
+      <div className="font-big">BankBank</div>{" "}
       {user ? (
         <>
-          <Link to="/" className="navbar-home">
-            {" "}
-            Trang chủ{" "}
-          </Link>
-          <p className="navbar-user">
-            Xin chào, <span> {user.fullName} </span>{" "}
-          </p>
-          <Link to="/logout" className="navbar-logout" onClick={handleLogout}>
-            {" "}
-            Đăng xuất
-          </Link>
+          <div>
+            <Link to="/" className="navbar-home">
+              {" "}
+              Trang chủ{" "}
+            </Link>
+            <p className="navbar-user">
+              Xin chào, <span> {user.fullName} </span>{" "}
+            </p>
+            <Link to="/logout" className="navbar-logout" onClick={handleLogout}>
+              {" "}
+              Đăng xuất
+            </Link>
+          </div>
         </>
       ) : (
         <>
-          <Link to="/login" className="navbar-login">
-            {" "}
-            Đăng nhập{" "}
-          </Link>
-          <Link to="/register" className="navbar-register">
-            {" "}
-            Đăng ký
-          </Link>
+          <div>
+            <Link to="/login" className="navbar-login">
+              {" "}
+              Đăng nhập{" "}
+            </Link>
+            <Link to="/register" className="navbar-register">
+              {" "}
+              Đăng ký
+            </Link>
+          </div>
         </>
-      )}
+      )}{" "}
     </nav>
   );
 };
