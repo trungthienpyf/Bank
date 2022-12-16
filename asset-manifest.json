@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/trungthienpyf/Bank/static/css/main.80645435.chunk.css",
+    "main.js": "/trungthienpyf/Bank/static/js/main.e927f489.chunk.js",
+    "main.js.map": "/trungthienpyf/Bank/static/js/main.e927f489.chunk.js.map",
+    "runtime-main.js": "/trungthienpyf/Bank/static/js/runtime-main.89bad992.js",
+    "runtime-main.js.map": "/trungthienpyf/Bank/static/js/runtime-main.89bad992.js.map",
+    "static/css/2.b8fe46b5.chunk.css": "/trungthienpyf/Bank/static/css/2.b8fe46b5.chunk.css",
+    "static/js/2.cc50cf70.chunk.js": "/trungthienpyf/Bank/static/js/2.cc50cf70.chunk.js",
+    "static/js/2.cc50cf70.chunk.js.map": "/trungthienpyf/Bank/static/js/2.cc50cf70.chunk.js.map",
+    "index.html": "/trungthienpyf/Bank/index.html",
+    "static/css/2.b8fe46b5.chunk.css.map": "/trungthienpyf/Bank/static/css/2.b8fe46b5.chunk.css.map",
+    "static/css/main.80645435.chunk.css.map": "/trungthienpyf/Bank/static/css/main.80645435.chunk.css.map",
+    "static/js/2.cc50cf70.chunk.js.LICENSE.txt": "/trungthienpyf/Bank/static/js/2.cc50cf70.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.89bad992.js",
+    "static/css/2.b8fe46b5.chunk.css",
+    "static/js/2.cc50cf70.chunk.js",
+    "static/css/main.80645435.chunk.css",
+    "static/js/main.e927f489.chunk.js"
+  ]
+}
