@@ -32,7 +32,7 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post("http://127.0.0.1:8000/api/login", user);
+    const res = await axios.post("https://mfw060.wcom.vn/api/login", user);
 
     if (res.data.errors) {
       console.log(res.data.errors);
@@ -48,7 +48,7 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    const re = await axios.post("http://127.0.0.1:8000/api/register", user);
+    const re = await axios.post("https://mfw060.wcom.vn/api/register", user);
     if (re.data.data) {
       console.log(re.data);
       throw re.data;
